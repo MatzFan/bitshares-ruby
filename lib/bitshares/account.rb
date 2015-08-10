@@ -10,7 +10,7 @@ module Bitshares
     end
 
     def method_missing(name, *args)
-      @wallet.send ('account_' + name.to_s).to_sym, args
+      Bitshares::Client::rpc.request('wallet_account_' + name.to_s, args)
     end
 
   end

@@ -5,9 +5,7 @@ require 'uri'
 require 'net/http'
 
 require 'bitshares/client'
+require 'bitshares/blockchain'
 require 'bitshares/wallet'
 require 'bitshares/account'
-
-module Bitshares
-
-end
+require 'bitshares/market'

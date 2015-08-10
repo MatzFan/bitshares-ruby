@@ -2,14 +2,10 @@ require 'spec_helper'
 
 describe Bitshares::Wallet do
 
-  let(:client) { double Bitshares::Client }
-  let(:wallet) { Bitshares::Wallet.new(client, 'wallet_name') }
+  before { Bitshares::Client.init }
 
-  context '#client' do
-    it 'references an instance of Bitshares::Client class' do
-      expect(wallet.client).to eq client
-    end
-  end
+  let(:rpc) { instance_double Bitshares::Client::Rpc }
+  let(:wallet) { Bitshares::Wallet.new('wallet_name') }
 
   context '#name' do
     it 'references the wallet name' do
@@ -18,9 +14,8 @@ describe Bitshares::Wallet do
   end
 
   context '#method_missing' do
-    it 'sends it\'s @client instance the method appended with "wallet_"' do
-      allow(client).to receive(:wallet_list) {}
-      expect(->{wallet.list}).not_to raise_error
+    it 'sends the client the method appended with "wallet_"' do
+      expect(wallet.list.class).to eq Array
     end
   end
 

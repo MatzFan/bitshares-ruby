@@ -2,10 +2,9 @@ module Bitshares
 
   class Wallet
 
-    attr_reader :client, :name, :account
+    attr_reader :name, :account
 
-    def initialize(client, name)
-      @client = client
+    def initialize(name)
       @name = name
       @account = nil
     end
@@ -15,7 +14,9 @@ module Bitshares
     end
 
     def method_missing(name, *args)
-      @client.send ('wallet_' + name.to_s).to_sym, args
+      puts name
+      puts args
+      Bitshares::Client::rpc.request('wallet_' + name.to_s, args)
     end
 
   end
