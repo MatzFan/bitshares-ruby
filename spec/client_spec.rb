@@ -11,13 +11,45 @@ describe Bitshares::Client do
       allow(client).to receive(:rpc_ports).and_return []
       expect(->{client.send :bitshares_running?}).to raise_error Bitshares::Client::Err, 'Server not running!'
     end
+  end
 
-    it 'instantiates an instance of the class if the bitshares server is running' do
-      expect(client.class).to eq Bitshares::Client
+  context '#wallet' do
+    it 'records the currently open wallet - nil when first instantiated' do
+      expect(client.wallet).to be_nil
     end
   end
 
-  context 'valid client commands' do
+  context '#open' do
+    it 'opens the wallet with the provided name' do
+      client.wallet_close
+      expect(client.wallet_get_info['open']).to eq false
+      client.open 'test1'
+      expect(client.wallet_get_info['name']).to eq 'test1'
+      expect(client.wallet_get_info['open']).to eq true
+    end
+
+    it 'sets @wallet to an instance of Bitshares::Wallet class' do
+      client.open 'test1'
+      expect(client.wallet.class).to eq Bitshares::Wallet
+    end
+  end
+
+  context '#close' do
+    it 'closes the wallet' do
+      client.wallet_open 'test1'
+      expect(client.wallet_get_info['open']).to eq true
+      client.close
+      expect(client.wallet_get_info['name']).to eq nil
+      expect(client.wallet_get_info['open']).to eq false
+    end
+
+    it 'sets @wallet to nil' do
+      client.close
+      expect(client.wallet).to be_nil
+    end
+  end
+
+  context '#rpc_request' do
     it 'with invalid username raise Bitshares::Client::Err "Bad credentials"' do
       stub_const('ENV', ENV.to_hash.merge('BITSHARES_USER' => 'wrong_password'))
       expect(->{client.get_info}).to raise_error Bitshares::Client::Err, 'Bad credentials'
@@ -28,14 +60,12 @@ describe Bitshares::Client do
       expect(->{client.get_info}).to raise_error Bitshares::Client::Err, 'Bad credentials'
     end
 
-    it 'with valid credentials returns a Hash of returned JSON data' do
-      expect(client.get_info.class).to eq Hash
-    end
-  end
-
-  context 'invalid client commands' do
-    it 'raise Bitshares::Client::Err' do
+    it 'with valid credentials and invalid client command raises Bitshares::Client::Err' do
       expect(->{client.not_a_cmd}).to raise_error Bitshares::Client::Err
+    end
+
+    it 'with valid credentials and valid client command returns a Hash of returned JSON data' do
+      expect(client.get_info.class).to eq Hash
     end
   end
 
