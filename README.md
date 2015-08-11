@@ -4,12 +4,10 @@ This Gem provides a Ruby API for the BitShares command line client by exposing t
 
 The binary client; "bitshares_client" must be installed, configured and running. The Gem detects the port the HTTP JSON RPC server is running on and expects the RPC endpoint to be `localhost` for security reasons - see [Configuration file settings](http://wiki.bitshares.org/index.php/BitShares/API).
 
-## Requirements and limitations
+## Requirements
 
 _Important:_ The interface uses the command line binary, not the GUI app.
 Tested with v0.9.2 client on Mac OS X (10.9.5) and Ubuntu 14.04. Should work on any *NIX platform - sorry not Windows.
-
-Currently the Gem supports single wallet support/authentication - see Authentication below
 
 ## Installation
 
@@ -29,11 +27,32 @@ Or install it yourself as:
 
 ## Authentication
 
-Login credentials for your BitShares wallet must be stored in the following environment variables:-
+RPC server login credentials (registered account name and password) must be stored in the following environment variables:-
 
-  `$BITSHARES_USER`
+  `$BITSHARES_ACCOUNT`
 
   `$BITSHARES_PASSWORD`
+
+## Configuration
+
+The Gem allows multiple wallet names and passwords to be stored so that actions requiring these data may be automated.
+To use this functionality - i.e. with the Wallet class (see below) wallet names and passwords must be configured in either of the following ways:
+
+**Via a hash**
+```Ruby
+Bitshares.configure(:wallet => {:name => 'wallet1', :password => 'password1'})
+Bitshares.configure(:wallet => {:name => 'wallet2', :password => 'password2'})
+...
+```
+
+**From a Yaml configuration file**
+```Ruby
+Bitshares.configure_with(<path to Yaml file>) # 'wallets' and 'passwords' keys and array values must be used, as above
+```
+
+```Ruby
+Bitshares.config # returns the configuration hash
+```
 
 ## Usage
 
@@ -54,7 +73,7 @@ client_wallet_market_submit_bid(account, amount, quote, price, base)
 ...
 ```
 
-Data is returned as a Hash
+Data is returned as a hash
 
 ### Detailed usage
 
@@ -69,16 +88,28 @@ count = chain.get_block_count # equivalent to `client.blockchain_get_block_count
 **Wallet**
 
 ```Ruby
-wallet = client.open 'wallet1' # opens a wallet available on this client.
+wallet = Bitshares::Wallet.new 'wallet1' # opens a wallet available on this client.
 ```
+Note that the following command opens the named wallet, but does not return an instance of Wallet class - use Wallet.new
+```Ruby
+wallet.open 'wallet1'
+```
+
 Thereafter 'wallet_' commands may be issued like this:
 ```Ruby
-wallet.get_info # gets info on this wallet, equivalent to client.wallet_get_info 
+wallet.get_info # gets info on this wallet, equivalent to client.wallet_get_info
 wallet.transfer(amount, asset, from, recipient) # equivalent to - you get the picture..
 ```
-A wallet is closed through the client:
+A wallet is unlocked and closed in a similar fashion:
 ```Ruby
-client.close
+wallet.unlock
+wallet.close
+```
+
+Predicates are provided for convenience:
+```Ruby
+wallet.open?
+wallet.unlocked?
 ```
 
 **Account**
@@ -109,7 +140,7 @@ market.order_history
 
 `rake spec`
 
-_Important:_ There is curerentlt no sandbox, so the test suite runs on your live client. If this concerns you - and it should :scream: - feel free to browse the code. In particular, the following client 'fixtures' are required for the full test suite to run and pass:
+_Important:_ There is currently no sandbox, so the test suite runs on your live client. If this concerns you - and it should :scream: - feel free to browse the code. In particular, the following client 'fixtures' are required for the full test suite to run and pass:
 
 An empty wallet 'test1', with password 'password1'
 

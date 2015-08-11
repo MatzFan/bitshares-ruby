@@ -2,11 +2,11 @@ module Bitshares
 
   class Client
 
-    attr_reader :wallet # the currently open wallet
-
     def self.init
-      @@rpc_instance = Bitshares::Client::Rpc.new
-      @@wallet = nil
+      @user = ENV['BITSHARES_ACCOUNT']
+      @password = ENV['BITSHARES_PASSWORD']
+      @@rpc_instance = Bitshares::Client::Rpc.new(@user, @password)
+      return self
     end
 
     def self.rpc
@@ -17,30 +17,16 @@ module Bitshares
       @@rpc_instance.request(method, args)
     end
 
-    def self.wallet
-      @@wallet
-    end
-
-    def self.open(name)
-      self.wallet_open name
-      @@wallet = Bitshares::Wallet.new(name)
-    end
-
-    def self.close
-      self.wallet_close
-      @@wallet = nil
-    end
-
     class Rpc
 
       class Err < RuntimeError; end
 
-      def initialize
+      def initialize(user, password)
         bitshares_running?
         @uri = URI("http://localhost:#{rpc_http_port}/rpc")
         @req = Net::HTTP::Post.new(@uri)
         @req.content_type = 'application/json'
-        @req.basic_auth ENV['BITSHARES_USER'], ENV['BITSHARES_PWD']
+        @req.basic_auth user, password
       end
 
       def request(m, args = [])
