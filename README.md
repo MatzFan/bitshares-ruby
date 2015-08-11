@@ -47,7 +47,7 @@ Bitshares.configure(:wallet => {:name => 'wallet2', :password => 'password2'})
 
 **From a Yaml configuration file**
 ```Ruby
-Bitshares.configure_with(<path to Yaml file>) # 'wallets' and 'passwords' keys and array values must be used, as above
+Bitshares.configure_with(<path to Yaml file>)
 ```
 
 ```Ruby
@@ -128,7 +128,7 @@ account.register(account_name, pay_from)
 
 The market class represents the trading (order book and history) for a given an asset-pair - e.g. CNY/BTS. It is instantiated like this:
 ```Ruby
-market = Bitshares::Market.new(CNY, BTS)
+market = Bitshares::Market.new('CNY', 'BTS')
 ```
 Any 'blockchain_market_' client method may then be used without specifying the quote and base assets again e.g:
 ```Ruby
