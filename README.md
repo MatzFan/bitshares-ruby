@@ -14,7 +14,7 @@ Tested with v0.9.2 client on Mac OS X (10.9.5) and Ubuntu 14.04. Should work on 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'bitshares-ruby'
+gem 'bitshares'
 ```
 
 And then execute:
@@ -23,7 +23,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install bitshares-ruby
+    $ gem install bitshares
 
 ## Authentication
 
