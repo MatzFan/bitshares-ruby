@@ -9,8 +9,8 @@ Gem::Specification.new do |s|
   s.authors       = ['Bruce Steedman']
   s.email         = ['bruce.steedman@gmail.com']
 
-  s.summary       = %q{Ruby API for BitShares client}
-  s.description   = %q{Exposes the BitShares client commands via RPC interface}
+  s.summary       = %q{Ruby API for BitShares CLI client}
+  s.description   = %q{Ruby API for BitShares CLI client}
   s.license       = "MIT"
 
   s.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(spec)/}) }
@@ -21,4 +21,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'bundler', '~> 1.10'
   s.add_development_dependency 'rake', '~> 10.0'
   s.add_development_dependency 'rspec', '~> 3.0'
+  s.add_development_dependency 'guard-rspec', '~> 4.0'
+  s.add_development_dependency 'growl', '~> 1.0'
 end

@@ -114,14 +114,19 @@ wallet.unlocked?
 
 **Account**
 
-Once you have a wallet instance you can do this:
+Once you have a wallet instance you can do the following, which references a particualr wallet account:
 ```Ruby
 account = wallet.account 'account_name'
 ```
-Thereafter 'wallet_account_' commands may be issued like this:
+Thereafter all 'wallet_account_' client commands may be issued without specifying the account_name parameter:
 ```Ruby
-account.balance
-account.register(account_name, pay_from)
+account.balance # balance for a particular account
+account.order_list # optional [limit] param
+account_register(pay_from_account [, optional params]) # this command takes up to 3 optional params
+```
+'wallet_account_' client commands taking an *optional* account_name parameter list all data for all of a wallet's accounts. If this is required, the relevant Wallet method should be used - e.g:
+```Ruby
+wallet.account_balance # lists all balances for all accounts for this wallet (c.c above)
 ```
 
 **Market**
@@ -130,13 +135,31 @@ The market class represents the trading (order book and history) for a given an 
 ```Ruby
 market = Bitshares::Market.new('CNY', 'BTS')
 ```
-Any 'blockchain_market_' client method may then be used without specifying the quote and base assets again e.g:
+The following 'blockchain_market_' client methods may then be used without specifying the quote and base assets again, but with any other optional params the client accepts:
 ```Ruby
+market.list_asks # equivalent to blockchain_market_list_asks [limit]
 market.list_bids
+market.list_covers
+market.order_book
 market.order_history
+market.price_history # required params are: <start time> <duration> optional: [granularity]
+
+market.list_shorts # requires no params and ignores the base asset
+get_asset_collateral # requires no params and retruns the collateral for the quote asset (ignores base asset)
 ```
 
-## Testing and specification
+Additionally, the following methods are available:
+```Ruby
+market.lowest_ask
+market.highest_bid
+market.mid_price # mean of the above
+market.last_fill # price of the last filled order
+market.center_price # price feeds median
+```
+
+## Specification & tests
+
+For the full specification run:
 
 `rake spec`
 

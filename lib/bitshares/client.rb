@@ -13,6 +13,10 @@ module Bitshares
       @@rpc_instance
     end
 
+    def self.synced?
+      blockchain_get_block_count >= self.get_info['blockchain_head_block_num']
+    end
+
     def self.method_missing(method, *args)
       @@rpc_instance.request(method, args)
     end

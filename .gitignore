@@ -1,6 +1,9 @@
 /.bundle/
 /.yardoc
 /Gemfile.lock
+/Guardfile
+/bin/guard
+/bin/_guard-core
 /_yardoc/
 /coverage/
 /doc/

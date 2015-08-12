@@ -14,6 +14,22 @@ describe Bitshares::Client do
     end
   end
 
+  context '#synced?' do
+    it 'returns false if the client is not synced with the network' do
+      c = client
+      head = c.get_info['blockchain_head_block_num']
+      allow(c).to receive(:blockchain_get_block_count).and_return(head -1)
+      expect(c.synced?).to be false
+    end
+
+    it 'returns true if the client is synced with the network' do
+      c = client
+      head = c.get_info['blockchain_head_block_num']
+      allow(c).to receive(:blockchain_get_block_count).and_return head
+      expect(c.synced?).to be true
+    end
+  end
+
   context '#rpc_request' do
     it 'with invalid username raise Bitshares::Client::Rpc::Err "Bad credentials"' do
       stub_const('ENV', ENV.to_hash.merge('BITSHARES_ACCOUNT' => 'wrong_password'))
