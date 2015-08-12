@@ -5,6 +5,7 @@ module Bitshares
     class AssetError < RuntimeError; end
 
     CHAIN = Bitshares::Blockchain
+    CLIENT = Bitshares::Client
 
     attr_reader :quote, :base
 
@@ -16,7 +17,7 @@ module Bitshares
     end
 
     def center_price
-      self.status(@quote, @base)['center_price']['ratio'].to_f
+      self.status['center_price']['ratio'].to_f
     end
 
     def last_fill
@@ -39,8 +40,16 @@ module Bitshares
       (highest_bid + lowest_ask) / 2
     end
 
-    def method_missing(name, *args)
-      Bitshares::Client::rpc.request('blockchain_market_' + name.to_s, args)
+    def list_shorts(limit = nil) # uses quote only, not base
+      CLIENT::rpc.request('blockchain_market_list_shorts', [quote] + [limit])
+    end
+
+    def get_asset_collateral # uses quote only, not base
+      CLIENT::rpc.request('blockchain_market_get_asset_collateral', [quote])
+    end
+
+    def method_missing(m, *args)
+      CLIENT::rpc.request('blockchain_market_' + m.to_s, [quote, base] + args)
     end
 
     private
@@ -50,7 +59,7 @@ module Bitshares
     end
 
     def order_hist
-      self.order_history(@quote, @base)
+      self.order_history
     end
 
     def multiplier
@@ -58,11 +67,11 @@ module Bitshares
     end
 
     def bids
-      self.list_bids(@quote, @base)
+      self.list_bids
     end
 
     def asks
-      self.list_asks(@quote, @base)
+      self.list_asks
     end
 
     def price(order) # CARE: preserve float precision with * NOT /

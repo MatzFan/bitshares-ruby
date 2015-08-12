@@ -85,4 +85,16 @@ describe Bitshares::Market do
     end
   end
 
+  context '#list_shorts' do
+    it 'returns the list of shorts' do
+      expect(market.list_shorts.all? { |o| o['type'] == 'short_order' }).to eq true
+    end
+  end
+
+  context '#list_shorts' do
+    it 'returns the list of shorts' do
+      expect(market.get_asset_collateral).to be_kind_of Fixnum
+    end
+  end
+
 end

@@ -4,8 +4,8 @@ describe Bitshares::Account do
 
   before { Bitshares::Client.init }
 
-  let(:wallet) { Bitshares::Client.open 'test1' }
-  let(:account) { Bitshares::Account.new(wallet, 'duff_account_name') }
+  let(:wallet) { Bitshares::Wallet.new 'test1' }
+  let(:account) { Bitshares::Account.new(wallet, 'account-test') }
 
   context '#wallet' do
     it 'references an instance of Bitshares::Wallet class' do
@@ -15,13 +15,21 @@ describe Bitshares::Account do
 
   context '#name' do
     it 'references the account name' do
-      expect(account.name).to eq 'duff_account_name'
+      expect(account.name).to eq 'account-test'
     end
   end
 
   context '#method_missing' do
+    it 'sends client the method appended with "wallet_account_"' do
+      expect(account.list_public_keys.first['native_pubkey']).to include 'BTS'
+    end
+
     it 'sends client the method appended with "wallet_account_" and any params' do
-      expect(account.historic_balance '2015-08-10T20:11:10').to eq []
+      begin
+        account.rename('account-test')
+      rescue Bitshares::Client::Rpc::Err => e
+        expect(e.to_s).to include 'duplicate account name'
+      end
     end
   end
 

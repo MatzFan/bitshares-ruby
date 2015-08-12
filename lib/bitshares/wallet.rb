@@ -45,8 +45,8 @@ module Bitshares
       !unlocked?
     end
 
-    def method_missing(name, *args)
-      Bitshares::Client::rpc.request('wallet_' + name.to_s, args)
+    def method_missing(m, *args)
+      Bitshares::Client::rpc.request('wallet_' + m.to_s, args)
     end
 
   end

@@ -17,8 +17,8 @@ module Bitshares
       blockchain_get_block_count >= self.get_info['blockchain_head_block_num']
     end
 
-    def self.method_missing(method, *args)
-      @@rpc_instance.request(method, args)
+    def self.method_missing(m, *args)
+      @@rpc_instance.request(m, args)
     end
 
     class Rpc
