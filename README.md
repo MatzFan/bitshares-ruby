@@ -47,7 +47,7 @@ Bitshares.configure(:wallet => {:name => 'wallet2', :password => 'password2'})
 
 **From a Yaml configuration file**
 ```Ruby
-Bitshares.configure_with(<path to Yaml file>)
+Bitshares.configure_with 'path-to-Yaml-file'
 ```
 
 ```Ruby
@@ -82,7 +82,7 @@ Data is returned as a hash
 The blockchain is implemented as a class purely for convenience when calling 'blockchain_' methods:
 ```Ruby
 chain = Bitshares::Blockchain
-count = chain.get_block_count # equivalent to `client.blockchain_get_block_count`
+count = chain.get_block_count # equivalent to client.blockchain_get_block_count
 ```
 
 **Wallet**
@@ -114,7 +114,7 @@ wallet.unlocked?
 
 **Account**
 
-Once you have a wallet instance you can do the following, which references a particualr wallet account:
+Once you have a wallet instance you can do the following, which references a particular wallet account:
 ```Ruby
 account = wallet.account 'account_name'
 ```
@@ -126,7 +126,7 @@ account_register(pay_from_account [, optional params]) # this command takes up t
 ```
 'wallet_account_' client commands taking an *optional* account_name parameter list all data for all of a wallet's accounts. If this is required, the relevant Wallet method should be used - e.g:
 ```Ruby
-wallet.account_balance # lists all balances for all accounts for this wallet (c.c above)
+wallet.account_balance # lists the balances for all accounts for this wallet (c.c. above)
 ```
 
 **Market**
@@ -137,7 +137,7 @@ market = Bitshares::Market.new('CNY', 'BTS')
 ```
 The following 'blockchain_market_' client methods may then be used without specifying the quote and base assets again, but with any other optional params the client accepts:
 ```Ruby
-market.list_asks # equivalent to blockchain_market_list_asks [limit]
+market.list_asks # equivalent to blockchain_market_list_asks(quote, base) [limit]
 market.list_bids
 market.list_covers
 market.order_book
@@ -145,7 +145,7 @@ market.order_history
 market.price_history # required params are: <start time> <duration> optional: [granularity]
 
 market.list_shorts # requires no params and ignores the base asset
-get_asset_collateral # requires no params and retruns the collateral for the quote asset (ignores base asset)
+get_asset_collateral # requires no params and returns the collateral for the quote asset (ignores the base asset)
 ```
 
 Additionally, the following methods are available:
@@ -154,22 +154,21 @@ market.lowest_ask
 market.highest_bid
 market.mid_price # mean of the above
 market.last_fill # price of the last filled order
-market.center_price # price feeds median
 ```
 
 ## Specification & tests
 
-For the full specification run:
+For the full specification please clone this repo and run:
 
 `rake spec`
 
 _Important:_ There is currently no sandbox, so the test suite runs on your live client. If this concerns you - and it should :scream: - feel free to browse the code. In particular, the following client 'fixtures' are required for the full test suite to run and pass:
 
-An empty wallet 'test1', with password 'password1'
+An empty wallet 'test1', with password 'password1' and an account called 'account-test' (please don't register this account!)
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/MatzFan/bitshares-ruby.
+Bug reports and pull requests (and feature requests) are welcome on GitHub at https://github.com/MatzFan/bitshares-ruby.
 
 
 ## License
