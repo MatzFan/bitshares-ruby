@@ -1,3 +1,3 @@
 module Bitshares
-  VERSION = '0.1.3.pre'
+  VERSION = '0.1.4.pre'
 end

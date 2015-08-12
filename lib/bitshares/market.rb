@@ -16,10 +16,6 @@ module Bitshares
       @multiplier = multiplier
     end
 
-    def center_price
-      self.status['center_price']['ratio'].to_f
-    end
-
     def last_fill
       return -1 if order_hist.empty?
       order_hist.first['bid_index']['order_price']['ratio'].to_f * multiplier

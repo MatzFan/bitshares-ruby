@@ -30,12 +30,6 @@ describe Bitshares::Market do
     end
   end
 
-  context '#center_price' do
-    it 'returns the center price' do
-      expect(market.center_price).to eq 0
-    end
-  end
-
   context '#last_fill' do
     it 'returns -1 if there is no order history' do
       allow(market).to receive(:order_hist).and_return []
