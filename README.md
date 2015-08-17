@@ -40,8 +40,8 @@ To use this functionality - i.e. with the Wallet class (see below) wallet names 
 
 **Via a hash**
 ```Ruby
-Bitshares.configure(:wallet => {:name => 'wallet1', :password => 'password1'})
-Bitshares.configure(:wallet => {:name => 'wallet2', :password => 'password2'})
+Bitshares.configure(:wallet => {'wallet1' => 'password1'})
+Bitshares.configure(:wallet => {'wallet2' => 'password2'})
 ...
 ```
 
@@ -62,6 +62,7 @@ Bitshares.config # returns the configuration hash
 require 'bitshares'
 
 client = Bitshares::Client.init # The object BitShares RPC client calls are routed to.
+client.synced? # if you wish to check whether you are synced with the p2p network.
 ```
 Any valid client command can then be issued via a method call with relevant parameters - e.g.
 
@@ -133,38 +134,61 @@ wallet.account_balance # lists the balances for all accounts for this wallet (c.
 
 The market class represents the trading (order book and history) for a given an asset-pair - e.g. CNY/BTS. It is instantiated like this:
 ```Ruby
-market = Bitshares::Market.new('CNY', 'BTS')
+cny_bts = Bitshares::Market.new('CNY', 'BTS')
 ```
+_Note that the BitShares market convention is that quote asset_id > base asset_id. Reversing the symbols in the above example results in the client returning  an 'Invalid Market' error._ An asset's id can be found from the asset hash by using:
+```Ruby
+Bitshares::Blockchain.get_asset 'CNY' for example
+```
+
 The following 'blockchain_market_' client methods may then be used without specifying the quote and base assets again, but with any other optional params the client accepts:
 ```Ruby
-market.list_asks # equivalent to blockchain_market_list_asks(quote, base) [limit]
-market.list_bids
-market.list_covers
-market.order_book
-market.order_history
-market.price_history # required params are: <start time> <duration> optional: [granularity]
+cny_bts.list_asks # equivalent to blockchain_market_list_asks(quote, base) [limit]
+cny_bts.list_bids
+cny_bts.list_covers
+cny_bts.order_book
+cny_bts.order_history
+cny_bts.price_history # required params are: <start time> <duration> optional: [granularity]
 
-market.list_shorts # requires no params and ignores the base asset
-get_asset_collateral # requires no params and returns the collateral for the quote asset (ignores the base asset)
+cny_bts.list_shorts # requires no params and ignores the base asset
+cny_bts.get_asset_collateral # requires no params and returns the collateral for the quote asset (ignores the base asset)
 ```
 
 Additionally, the following methods are available:
 ```Ruby
-market.lowest_ask
-market.highest_bid
-market.mid_price # mean of the above
-market.last_fill # price of the last filled order
+cny_bts.lowest_ask
+cny_bts.highest_bid
+cny_bts.mid_price # mean of the above
+cny_bts.last_fill # price of the last filled order
+```
+
+**Trading**
+
+So, once we have an account and a market, what do we need to trade - why a Trader of course!
+
+```Ruby
+cny_bts_trader = Bitshares::Trader.new(account, cny_bts) # using examples above
+```
+
+The following methods are then available:
+```Ruby
+cny_bts_trader.submit_bid(quantity, price) # submits an order to buy <quantity> of Market base (BTS here) at <price> (quote/base) - returns order_id
+cny_bts_trader.submit_ask(quantity, price) # submits an order to sell <quantity> of Market base (BTS here) at <price> (quote/base) - returns order_id
+cny_bts_trader.order_list # lists orders for the account and market - optional limit arg, returns orders array
+cny_bts_trader.cancel_orders(*order_ids) # cancels one or more orders for this account and market, returns array of memo's e.g. 'cancel ASK-90189b6e'
 ```
 
 ## Specification & tests
 
-For the full specification please clone this repo and run:
+For the full specification clone this repo and run:
 
 `rake spec`
 
-_Important:_ There is currently no sandbox, so the test suite runs on your live client. If this concerns you - and it should :scream: - feel free to browse the code. In particular, the following client 'fixtures' are required for the full test suite to run and pass:
+**Test Requirements**
 
-An empty wallet 'test1', with password 'password1' and an account called 'account-test' (please don't register this account!)
+There is currently no test client/blockchain, so the test suite runs live - orders and all. If this concerns you - and it should :scream: - feel free to browse the test code first. The following client 'fixtures' are required for the full test suite to run and pass:
+
+An empty wallet 'test1', with password 'password1' and an account called 'account-test' *Please don't register this account!*. The account will also need funding with a few BTS as trades/cancellations are 0.5 BTS each. 100 (circa 25 cents right now) should be more than enough to run the suite a few times.
 
 ## Contributing
 

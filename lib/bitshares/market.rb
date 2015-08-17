@@ -2,10 +2,7 @@ module Bitshares
 
   class Market
 
-    class AssetError < RuntimeError; end
-
-    CHAIN = Bitshares::Blockchain
-    CLIENT = Bitshares::Client
+    class Error < RuntimeError; end
 
     attr_reader :quote, :base
 
@@ -13,6 +10,7 @@ module Bitshares
       [quote, base].each &:upcase!
       @quote_hash, @base_hash = asset(quote), asset(base)
       @quote, @base = @quote_hash['symbol'], @base_hash['symbol']
+      valid_market?(@quote_hash['id'], @base_hash['id'])
       @multiplier = multiplier
     end
 
@@ -37,21 +35,25 @@ module Bitshares
     end
 
     def list_shorts(limit = nil) # uses quote only, not base
-      CLIENT::rpc.request('blockchain_market_list_shorts', [quote] + [limit])
+      CLIENT.request('blockchain_market_list_shorts', [quote] + [limit])
     end
 
     def get_asset_collateral # uses quote only, not base
-      CLIENT::rpc.request('blockchain_market_get_asset_collateral', [quote])
+      CLIENT.request('blockchain_market_get_asset_collateral', [quote])
     end
 
     def method_missing(m, *args)
-      CLIENT::rpc.request('blockchain_market_' + m.to_s, [quote, base] + args)
+      CLIENT.request('blockchain_market_' + m.to_s, [quote, base] + args)
     end
 
     private
 
     def asset(symbol) # returns hash
-      CHAIN.get_asset(symbol) || (raise AssetError, "Invalid asset: #{symbol}")
+      CHAIN.get_asset(symbol) || (raise Error, "Invalid asset: #{symbol}")
+    end
+
+    def valid_market?(quote_id, base_id)
+      raise Error, 'Invalid market; quote ID <= base ID' if quote_id <= base_id
     end
 
     def order_hist

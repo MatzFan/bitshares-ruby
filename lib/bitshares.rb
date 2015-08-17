@@ -10,10 +10,15 @@ require 'bitshares/blockchain'
 require 'bitshares/wallet'
 require 'bitshares/account'
 require 'bitshares/market'
+require 'bitshares/trader'
+
+CLIENT = Bitshares::Client
+CHAIN = Bitshares::Blockchain
 
 # stackoverflow.com/questions/6233124/where-to-place-access-config-file-in-gem
 module Bitshares
-  @config = {:wallets => {nil => nil}} # name/password key/value pairs
+
+  @config = {:wallet => {nil => nil}} # name/password key/value pairs
 
   @valid_keys = @config.keys
 

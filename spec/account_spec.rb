@@ -2,7 +2,8 @@ require 'spec_helper'
 
 describe Bitshares::Account do
 
-  before { Bitshares::Client.init }
+  before { CLIENT.init }
+  before { CLIENT.request('wallet_open', ['test1']) } # ensures test wallet is open
 
   let(:wallet) { Bitshares::Wallet.new 'test1' }
   let(:account) { Bitshares::Account.new(wallet, 'account-test') }
@@ -27,7 +28,7 @@ describe Bitshares::Account do
     it 'sends client the method appended with "wallet_account_" and any params' do
       begin
         account.rename('account-test')
-      rescue Bitshares::Client::Rpc::Err => e
+      rescue Bitshares::Client::Err => e
         expect(e.to_s).to include 'duplicate account name'
       end
     end

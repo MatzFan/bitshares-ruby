@@ -2,14 +2,15 @@ require 'spec_helper'
 
 describe Bitshares::Wallet do
 
-  before { Bitshares::Client.init }
+  before { CLIENT.init }
+  before { Bitshares.configure(:wallet => {'test1' => 'password1'}) }
+  before { CLIENT.request('wallet_open', ['test1']) } # open test wallet
 
-  let(:rpc) { instance_double Bitshares::Client::Rpc }
   let(:wallet) { Bitshares::Wallet.new('test1') }
 
   context '#new(name)' do
-    it 'raises a Bitshares::Client::Rpc::Err error with an invalid wallet name' do
-      expect(->{wallet.new 'duff_name'}).to raise_error Bitshares::Client::Rpc::Err
+    it 'raises a Bitshares::Client::Err error with an invalid wallet name' do
+      expect(->{wallet.new 'duff_name'}).to raise_error Bitshares::Client::Err
     end
   end
 
