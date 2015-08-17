@@ -61,7 +61,7 @@ Bitshares.config # returns the configuration hash
 ```ruby
 require 'bitshares'
 
-client = Bitshares::Client.init # The object BitShares RPC client calls are routed to.
+client = CLIENT.init # CLIENT = Bitshares::Client -the object BitShares RPC client calls are routed to.
 client.synced? # if you wish to check whether you are synced with the p2p network.
 ```
 Any valid client command can then be issued via a method call with relevant parameters - e.g.
@@ -82,7 +82,7 @@ Data is returned as a hash
 
 The blockchain is implemented as a class purely for convenience when calling 'blockchain_' methods:
 ```Ruby
-chain = Bitshares::Blockchain
+chain = Bitshares::Blockchain # CHAIN may be used
 count = chain.get_block_count # equivalent to client.blockchain_get_block_count
 ```
 
@@ -138,10 +138,10 @@ cny_bts = Bitshares::Market.new('CNY', 'BTS')
 ```
 _Note that the BitShares market convention is that quote asset_id > base asset_id. Reversing the symbols in the above example results in the client returning  an 'Invalid Market' error._ An asset's id can be found from the asset hash by using:
 ```Ruby
-Bitshares::Blockchain.get_asset 'CNY' for example
+Bitshares::Blockchain.get_asset 'CNY' # for example
 ```
 
-The following 'blockchain_market_' client methods may then be used without specifying the quote and base assets again, but with any other optional params the client accepts:
+The following 'blockchain_market_' client methods may then be used without specifying the quote and base assets again, but with any other optional args the client accepts:
 ```Ruby
 cny_bts.list_asks # equivalent to blockchain_market_list_asks(quote, base) [limit]
 cny_bts.list_bids
@@ -170,12 +170,16 @@ So, once we have an account and a market, what do we need to trade - why a Trade
 cny_bts_trader = Bitshares::Trader.new(account, cny_bts) # using examples above
 ```
 
-The following methods are then available:
+You can now do this:
 ```Ruby
-cny_bts_trader.submit_bid(quantity, price) # submits an order to buy <quantity> of Market base (BTS here) at <price> (quote/base) - returns order_id
-cny_bts_trader.submit_ask(quantity, price) # submits an order to sell <quantity> of Market base (BTS here) at <price> (quote/base) - returns order_id
-cny_bts_trader.order_list # lists orders for the account and market - optional limit arg, returns orders array
-cny_bts_trader.cancel_orders(*order_ids) # cancels one or more orders for this account and market, returns array of memo's e.g. 'cancel ASK-90189b6e'
+cny_bts_trader.order_list # lists orders for the account and market - optional limit arg. Returns orders array
+
+cny_bts_trader.submit_bid(quantity, price) # buy <quantity> of Market base (BTS here) at <price> (quote/base)
+cny_bts_trader.submit_ask(quantity, price) # sell <quantity> of Market base (BTS here) at <price> (quote/base)
+  # both return respective order id
+  
+cny_bts_trader.cancel_orders(*order_ids) # cancels one or more orders for the account and market
+  # returns array of memo's e.g. 'cancel ASK-90189b6e'
 ```
 
 ## Specification & tests
@@ -186,13 +190,13 @@ For the full specification clone this repo and run:
 
 **Test Requirements**
 
-There is currently no test client/blockchain, so the test suite runs live - orders and all. If this concerns you - and it should :scream: - feel free to browse the test code first. The following client 'fixtures' are required for the full test suite to run and pass:
+There is currently no test blockchain, so the test suite runs on the live one - orders and all. If this concerns you - and it should :scream: - feel free to browse the test code first. The following client 'fixtures' are required for the full test suite to run and pass:
 
-An empty wallet 'test1', with password 'password1' and an account called 'account-test' *Please don't register this account!*. The account will also need funding with a few BTS as trades/cancellations are 0.5 BTS each. 100 (circa 25 cents right now) should be more than enough to run the suite a few times.
+An empty wallet 'test1', with password 'password1' and an account called 'account-test' *Please don't register this account!*. The account will also need funding with a few BTS as trades/cancellations are 0.5 BTS each. 10 BTS (circa 2.5 cents right now) should be more than enough to run the suite a few times.
 
 ## Contributing
 
-Bug reports and pull requests (and feature requests) are welcome on GitHub at https://github.com/MatzFan/bitshares-ruby.
+Bug reports, pull requests (and feature requests) are welcome on GitHub at https://github.com/MatzFan/bitshares-ruby.
 
 
 ## License
