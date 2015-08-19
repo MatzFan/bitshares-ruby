@@ -1,4 +1,4 @@
-# Bitshares Ruby Gem
+# Bitshares Ruby Gem - PLACEHOLDER FOR GRAPHENE BRANCH
 
 This Gem provides a Ruby API for the BitShares command line client by exposing the RPC commands of the [Bitshares client v0.x](https://github.com/bitshares/bitshares) as methods of it's Client class.
 
@@ -177,7 +177,7 @@ cny_bts_trader.order_list # lists orders for the account and market - optional l
 cny_bts_trader.submit_bid(quantity, price) # buy <quantity> of Market base (BTS here) at <price> (quote/base)
 cny_bts_trader.submit_ask(quantity, price) # sell <quantity> of Market base (BTS here) at <price> (quote/base)
   # both return respective order id
-  
+
 cny_bts_trader.cancel_orders(*order_ids) # cancels one or more orders for the account and market
   # returns array of memo's e.g. 'cancel ASK-90189b6e'
 ```
