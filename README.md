@@ -27,7 +27,7 @@ Or install it yourself as:
 
 ## Authentication
 
-RPC server login credentials (registered account name and password) must be stored in the following environment variables:-
+RPC server login credentials (registered account name and password) must be stored in the following environment variables or set in the configuation (see below):-
 
   `$BITSHARES_ACCOUNT`
 
@@ -35,10 +35,19 @@ RPC server login credentials (registered account name and password) must be stor
 
 ## Configuration
 
+Config settings may be set via a hash or Yaml file.
+
+**Via a hash**
+
+RPC server login credentials may be set as follows:
+```Ruby
+Bitshares.configure(:rpc_username => 'whatever')
+Bitshares.configure(:rpc_password => 'whatever')
+```
+
 The Gem allows multiple wallet names and passwords to be stored so that actions requiring these data may be automated.
 To use this functionality - i.e. with the Wallet class (see below) wallet names and passwords must be configured in either of the following ways:
 
-**Via a hash**
 ```Ruby
 Bitshares.configure(:wallet => {'wallet1' => 'password1'})
 Bitshares.configure(:wallet => {'wallet2' => 'password2'})
@@ -177,7 +186,7 @@ cny_bts_trader.order_list # lists orders for the account and market - optional l
 cny_bts_trader.submit_bid(quantity, price) # buy <quantity> of Market base (BTS here) at <price> (quote/base)
 cny_bts_trader.submit_ask(quantity, price) # sell <quantity> of Market base (BTS here) at <price> (quote/base)
   # both return respective order id
-  
+
 cny_bts_trader.cancel_orders(*order_ids) # cancels one or more orders for the account and market
   # returns array of memo's e.g. 'cancel ASK-90189b6e'
 ```

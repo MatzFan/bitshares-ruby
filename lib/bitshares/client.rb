@@ -6,8 +6,8 @@ module Bitshares
 
     def self.init
       bitshares_running?
-      user = ENV['BITSHARES_ACCOUNT']
-      password = ENV['BITSHARES_PASSWORD']
+      user = ENV['BITSHARES_ACCOUNT'] || Bitshares.config[:rpc_username]
+      password = ENV['BITSHARES_PASSWORD'] || Bitshares.config[:rpc_password]
       @uri = URI("http://localhost:#{rpc_http_port}/rpc")
       @req = Net::HTTP::Post.new(@uri)
       @req.content_type = 'application/json'
