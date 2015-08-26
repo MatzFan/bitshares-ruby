@@ -1,7 +1,5 @@
 require 'spec_helper'
 
-abort 'bitshares client not running!' if `pgrep bitshares_clien`.empty? # 15 ch
-
 describe Bitshares::Client do
 
   before do
