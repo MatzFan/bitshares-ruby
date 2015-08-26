@@ -2,7 +2,7 @@ $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
 require 'bitshares'
 
-abort 'bitshares client not running!' if `pgrep bitshares_clien`.empty? # 15 ch
+abort 'bitshares client not running!' if `pgrep cli_wallet`.empty? # 15 ch
 
 Bitshares.configure(wallets: {test1: 'password1'})
 

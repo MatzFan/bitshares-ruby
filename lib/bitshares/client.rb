@@ -15,9 +15,9 @@ module Bitshares
       return self
     end
 
-    def self.synced?
-      blockchain_get_block_count >= self.get_info['blockchain_head_block_num']
-    end
+    # def self.synced?
+    #   blockchain_get_block_count >= self.info['blockchain_head_block_num']
+    # end
 
     def self.method_missing(m, *args)
       self.request(m, args)
@@ -26,7 +26,7 @@ module Bitshares
     def self.request(m, args = [])
       resp = nil
       Net::HTTP.start(@uri.hostname, @uri.port) do |http|
-        @req.body = { method: m, params: args, jsonrpc: '2.0', id: 0 }.to_json
+        @req.body = { method: m, params: args, jsonrpc: '2.0', id: 0 }.to_json # id is API number?
         resp = http.request(@req)
       end
       raise Err, 'Bad credentials' if resp.class == Net::HTTPUnauthorized
@@ -48,8 +48,13 @@ module Bitshares
       end
     end
 
+    # def self.rpc_ws_port
+    #   puts rpc_ports.first
+    #   rpc_ports.first
+    # end
+
     def self.rpc_ports # returns bitshares HTTP JSON RPC and JSON RPC server ports
-      `lsof -iTCP@localhost | grep bitshares`.scan(/:(\d+) \(LISTEN\)/).flatten
+      `lsof -iTCP@localhost | grep cli_walle`.scan(/:(\d+)/).flatten
     end
 
   end
