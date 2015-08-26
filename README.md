@@ -203,7 +203,11 @@ There is currently no test blockchain, so the test suite runs on the live one - 
 
 An empty wallet 'test1', with password 'password1' and an account called 'account-test' *Please don't register this account!*.
 
-When run, the test suite asks the user whether tests with a cost attached should be included (e.g. submitting/cancelling orders). If these are included, the test1 account will need funding beforehand with a few BTS as trades/cancellations are 0.5 BTS each. 10 BTS (circa 2.5 cents right now) should be more than enough to run the suite a few times.
+Tests with a real cost (e.g. submitting/cancelling orders) are disabled by default. To include these use the following environment variable setting:
+```
+export BITSHARES_INCLUDE_TESTS_WITH_COSTS=true
+```
+If these tests are included, the 'test1' account will need funding beforehand with a few BTS, as trades/cancellations are 0.5 BTS each. 10 BTS (circa 2.5 cents right now) should be more than enough to run the suite a few times.
 
 ## Contributing
 
