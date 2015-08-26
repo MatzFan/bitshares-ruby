@@ -16,7 +16,7 @@ describe Bitshares::Trader do
     end
   end
 
-  context '#submit_bid(quantity, price, [stupid = false])' do
+  context '#submit_bid(quantity, price, [stupid = false])', :type => :cost do
     it 'submits an order to buy <quantity> of Market base at <price> (quote/base) and returns the order id' do
       begin
         cny_bts_trader.submit_bid(1, 0.001) # buy 1 BTS @ 0.001 CNY/BTS
@@ -26,7 +26,7 @@ describe Bitshares::Trader do
     end
   end
 
-  context '#submit_ask(quantity, price, [stupid = false])' do
+  context '#submit_ask(quantity, price, [stupid = false])', :type => :cost do
     it 'submits an order to sell <quantity> of Market base at <price> (quote/base) and returns the order id' do
       expect(cny_bts_trader.submit_ask(1, 2)).to match /^[a-f\d]{40}$/i # sell 1 BTS @ 2 CNY/BTS
     end
@@ -39,7 +39,7 @@ describe Bitshares::Trader do
     end
   end
 
-  context '#cancel_orders(*order_ids)' do
+  context '#cancel_orders(*order_ids)', :type => :cost do
     it 'cancels one or more orders and returns list of memo entries - e.g. ["cancel ASK-90189b6e", cancel...]' do
       ids = cny_bts_trader.order_list.map &:first
       expect(cny_bts_trader.cancel_orders ids).to eq ids.map { |id| "cancel ASK-#{id[0...8]}" }

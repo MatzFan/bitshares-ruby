@@ -199,9 +199,11 @@ For the full specification clone this repo and run:
 
 **Test Requirements**
 
-There is currently no test blockchain, so the test suite runs on the live one - orders and all. If this concerns you - and it should :scream: - feel free to browse the test code first. The following client 'fixtures' are required for the full test suite to run and pass:
+There is currently no test blockchain, so the test suite runs on the live one - orders and all. If this concerns you - and it should :scream: - feel free to browse the test code first. This means that the environment variables described in Authentication above must be set to a valid wallet account and password in order for the test suite to access the p2p network. Additionally, the following client 'fixtures' are required for the full test suite to run and pass:
 
-An empty wallet 'test1', with password 'password1' and an account called 'account-test' *Please don't register this account!*. The account will also need funding with a few BTS as trades/cancellations are 0.5 BTS each. 10 BTS (circa 2.5 cents right now) should be more than enough to run the suite a few times.
+An empty wallet 'test1', with password 'password1' and an account called 'account-test' *Please don't register this account!*.
+
+When run, the test suite asks the user whether tests with a cost attached should be included (e.g. submitting/cancelling orders). If these are included, the test1 account will need funding beforehand with a few BTS as trades/cancellations are 0.5 BTS each. 10 BTS (circa 2.5 cents right now) should be more than enough to run the suite a few times.
 
 ## Contributing
 
