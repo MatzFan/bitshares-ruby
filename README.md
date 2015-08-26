@@ -192,7 +192,15 @@ For the full specification clone this repo and run:
 
 There is currently no test blockchain, so the test suite runs on the live one - orders and all. If this concerns you - and it should :scream: - feel free to browse the test code first. The following client 'fixtures' are required for the full test suite to run and pass:
 
+<<<<<<< HEAD
 An empty wallet 'test1', with password 'password1' and an account called 'account-test' *Please don't register this account!*. The account will also need funding with a few BTS as trades/cancellations are 0.5 BTS each. 10 BTS (circa 2.5 cents right now) should be more than enough to run the suite a few times.
+=======
+Tests with a real cost (e.g. submitting/cancelling orders) are disabled by default. To include these use the following environment variable setting:
+```
+export BITSHARES_INCLUDE_TESTS_WITH_COSTS=true
+```
+If these tests are included, the 'test1' account will need funding beforehand with a few BTS, as trades/cancellations are 0.5 BTS each. 10 BTS (circa 2.5 cents right now) should be more than enough to run the suite a few times.
+>>>>>>> master
 
 ## Contributing
 
