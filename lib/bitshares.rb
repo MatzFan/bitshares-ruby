@@ -18,7 +18,8 @@ CHAIN = Bitshares::Blockchain
 # stackoverflow.com/questions/6233124/where-to-place-access-config-file-in-gem
 module Bitshares
 
-  @config = {:wallet => {nil => nil}} # name/password key/value pairs
+  @config = {rpc_username: nil, rpc_password: nil,
+             :wallet => {nil => nil}} # name/password key/value pairs
 
   @valid_keys = @config.keys
 
