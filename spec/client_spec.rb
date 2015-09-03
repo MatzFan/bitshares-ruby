@@ -54,7 +54,7 @@ describe Bitshares::Client do
 
       it 'with a valid client command returns valid data' do
         CLIENT.init
-        expect(client.get_chain_id).to eq 'd011922587473757011118587f93afcc314fbaea094fc1055574721b27975083'
+        expect(client.get_chain_id).to match /[0-9a-f]{64}/
       end
     end
 
