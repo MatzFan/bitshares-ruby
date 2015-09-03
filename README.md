@@ -1,4 +1,5 @@
 # Bitshares Ruby Gem
+[![Gem Version](https://badge.fury.io/rb/bitshares.svg)](http://badge.fury.io/rb/bitshares)
 
 This Gem provides a Ruby API for the BitShares command line client by exposing the RPC commands of the [Bitshares client v0.x](https://github.com/bitshares/bitshares) as methods of it's Client class.
 
